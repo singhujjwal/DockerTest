@@ -1,0 +1,86 @@
+# Tips for running docker on Ubuntu
+
+docker build --build-arg http_proxy="http://proxy-wsa.esl.xxxx.com":80 --build-arg https_proxy=http://proxy-wsa.esl.xxxx.com:80 --build-arg no_proxy=10.106.248.247,localhost,127.0.0.1,0.0.0.0,169.254.128.1,.cisco.com,10.0.0.0.0/8 -t "ujjwal:singh" .
+
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo vim /etc/systemd/system/docker.service.d/http-proxy.conf
+[Service]
+Environment="HTTP_PROXY=http://proxy-wsa.esl.cisco.com:80" "HTTPS_PROXY=http://proxy-wsa.esl.cisco.com:80" "NO_PROXY=localhost,127.0.0.0/8,10.0.0.0/8,.cisco.com,.webex.com,.wbx2.com,.seeapl.com,.ciscospark.com"
+
+sudo touch /etc/docker/daemon.json
+
+
+{
+    "api-cors-header": "",
+    "authorization-plugins": [],
+    "bip": "",
+    "bridge": "",
+    "cgroup-parent": "",
+    "cluster-store": "",
+    "cluster-store-opts": {},
+    "cluster-advertise": "",
+    "debug": true,
+    "default-gateway": "",
+    "default-gateway-v6": "",
+    "default-runtime": "runc",
+    "default-ulimits": {},
+    "disable-legacy-registry": false,
+    "dns": [],
+    "dns-opts": [],
+    "dns-search": [],
+    "exec-opts": [],
+    "exec-root": "",
+    "experimental": false,
+    "fixed-cidr": "",
+    "fixed-cidr-v6": "",
+    "graph": "",
+    "group": "",
+    "hosts": [],
+    "icc": false,
+    "insecure-registries": [],
+    "ip": "0.0.0.0",
+    "iptables": false,
+    "ipv6": false,
+    "ip-forward": false,
+    "ip-masq": false,
+    "labels": [],
+    "live-restore": true,
+    "log-driver": "",
+    "log-level": "",
+    "log-opts": {},
+    "max-concurrent-downloads": 3,
+    "max-concurrent-uploads": 5,
+    "mtu": 0,
+    "oom-score-adjust": -500,
+    "pidfile": "",
+    "raw-logs": false,
+    "registry-mirrors": [],
+    "runtimes": {
+        "runc": {
+            "path": "runc"
+        },
+        "custom": {
+            "path": "/usr/local/bin/my-runc-replacement",
+            "runtimeArgs": [
+                "--debug"
+            ]
+        }
+    },
+    "selinux-enabled": false,
+    "storage-driver": "",
+    "storage-opts": [],
+    "swarm-default-advertise-addr": "",
+    "tls": true,
+    "tlscacert": "",
+    "tlscert": "",
+    "tlskey": "",
+    "tlsverify": true,
+    "userland-proxy": false,
+    "userns-remap": ""
+}
+
+
+systemctl daemon-reload
+sudo systemctl restart docker.service 
+
+dameon.json is creating issues currently
